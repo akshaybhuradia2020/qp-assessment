@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service'
-import { CreateOrderDto} from './order.validation';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Order } from './order.entity';
 // import { Role } from 'src/role.enum';
 // import { Roles } from 'src/roles.decorator';
 // import { RolesGuard } from 'src/roles.guard';
@@ -14,7 +14,7 @@ export class OrderController {
 
     @UseGuards(AuthGuard)
     @Post('create_order')
-    async createOrder(@Body() dto: CreateOrderDto){
+    async createOrder(@Body() dto: Order){
       return await this.orderService.create(dto);
     };
 
@@ -24,11 +24,11 @@ export class OrderController {
       return await this.orderService.get(userid);
     };
 
-    @UseGuards(AuthGuard)
-    @Post('update_order/:orderid')
-    async updateOrder(@Param('orderid') orderid: string, @Body() _data: any){
-      return await this.orderService.update(orderid, _data);
-    };
+    // @UseGuards(AuthGuard)
+    // @Post('update_order/:orderid')
+    // async updateOrder(@Param('orderid') orderid: string, @Body() _data: any){
+    //   return await this.orderService.update(orderid, _data);
+    // };
 }
 
 

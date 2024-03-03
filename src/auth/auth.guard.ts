@@ -26,11 +26,13 @@ import {
         );
         
         
-        console.log(payload);
-        if (payload['isadmin']) {
-            payload["role"] = "admin"
+
+        if (payload['isadmin'] === true) {
+            payload["roles"] = "admin"
         }
-        payload["role"] = "user"
+        else{
+          payload["roles"] = "user"
+        }
 
         request['user'] = payload;
         

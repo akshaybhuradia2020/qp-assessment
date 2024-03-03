@@ -4,17 +4,24 @@ services:
     container_name: nestjs
     build: .
     ports:
-      - 3000:3000
+      - 3001:3000
     depends_on:
-      - mongodb
+      - mysql
     
-  mongodb:
-    image: mongo
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=grocery_booking
+      - MYSQL_USER=development
+      - MYSQL_PASSWORD=a
+      - MYSQL_ROOT_PASSWORD=a
     ports:
-      - 27017:27017
+      - 3307:3306
+    expose:
+      - 3306
     volumes:
-      - mongo-data:/data/db
+      - mysql-data:/data/db
 
 volumes:
-  mongo-data: {}
-  
+  mysql-data: {}

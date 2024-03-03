@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { GroceryService } from './grocery.service';
-import {CreateGroceryDto} from './grocery.validation';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Role } from 'src/role.enum';
-import { Roles } from 'src/roles.decorator';
-import { RolesGuard } from 'src/roles.guard';
+import { Role } from 'src/rbac/role.enum';
+import { Roles } from 'src/rbac/roles.decorator';
+import { RolesGuard } from 'src/rbac/roles.guard';
+import { Grocery } from './grocery.entity';
 
 @Controller('grocery')
 export class GroceryController {
@@ -14,8 +14,8 @@ export class GroceryController {
     @Roles(Role.Admin)
     @UseGuards(AuthGuard, RolesGuard)
     @Post('create_gros')
-    async createGrocery(@Body() dto: CreateGroceryDto){
-      return await this.groceryService.create(dto);
+    async createGrocery(@Body() _data: Grocery){
+      return await this.groceryService.create(_data);
     }
   
     @Get("get_all_gros")
@@ -31,12 +31,11 @@ export class GroceryController {
     @Roles(Role.Admin)
     @UseGuards(AuthGuard, RolesGuard)
     @Post('update_gros/:id')
-    async updateGrocery(@Param('id') id: string, @Body() dto: any){
-      return await this.groceryService.update(id, dto);
+    async updateGrocery(@Param('id') id: string, @Body() _data: any){
+      return await this.groceryService.update(id, _data);
     }
 
-    @Roles(Role.Admin)
-    @UseGuards(AuthGuard, RolesGuard)
+    // @Roles(Role.Admin)
     @Delete("delete_grocery/:id")
     async deleteGrocery(@Param('id') id: string){
       return await this.groceryService.delete(id);

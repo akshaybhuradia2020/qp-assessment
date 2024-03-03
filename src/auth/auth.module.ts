@@ -9,7 +9,7 @@ import {UserOpModule} from '../user_op/user_op.module';
     JwtModule.register({
       global: true,
       secret: "wsdf",
-      signOptions: { expiresIn: '600s' },
+      signOptions: { expiresIn: '6000s' },
     }),
   ],
   providers: [AuthService],

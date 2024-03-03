@@ -1,31 +1,30 @@
-import {Model} from 'mongoose';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { User } from 'src/schemas/user.schema';
-import {CreateUserDto} from './user_op.validation';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './user_op.entity';
+
 
 
 @Injectable()
 export class UserOpService {
-    constructor(@InjectModel(User.name) private UserModel: Model<User>){}
+    constructor(@InjectRepository(User) private usersRepository: Repository<User>){}
 
-    async create(createUserDto: CreateUserDto): Promise<User>{
-        const createdUser = new this.UserModel(createUserDto);
-        return createdUser.save();  
+    async create(createUserDto: User): Promise<User>{
+        return await this.usersRepository.save(createUserDto);
     };
 
     async checkuserexist(_data:Object): Promise<Object>{
-        const _check = await this.UserModel.findOne(_data);
+        const _check = await this.usersRepository.findOneBy(_data);
         
-        if(_check) return {"user_id": _check._id, "is_admin":_check.is_admin};
+        if(_check) return {"user_id": _check.id, "is_admin":_check.is_admin};
         return {"user_id": null, "is_admin": null};
     };
 
-    async getuserbyid(_id:string): Promise<User[]>{
-        return this.UserModel.findById(_id);
+    async getuserbyid(_id:string): Promise<User>{
+        return await this.usersRepository.findOneBy({id: _id});
     };
 
     async getalluser(): Promise<User[]>{
-        return this.UserModel.find().exec();
+        return this.usersRepository.find();
     };
 }

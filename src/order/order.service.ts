@@ -1,25 +1,26 @@
-import { Model } from 'mongoose';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Order } from '../schemas/order.schema';
-import { CreateOrderDto } from './order.validation';
+import { InjectRepository } from '@nestjs/typeorm';
 import { GroceryService } from 'src/grocery/grocery.service';
+import { Order } from './order.entity';
+
 
 
 
 @Injectable()
 export class OrderService {
-    constructor(@InjectModel(Order.name) private OrderModel: Model<Order>, 
+    constructor(@InjectRepository(Order) private OrderModel: Repository<Order>, 
         private groceryservice: GroceryService){}
 
-    async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    async create(createOrder: Order): Promise<Order> {
         let _flag = false;
         try{
-            for(const _item in createOrderDto.grocery_selected){
-                const _get_grocery = await this.groceryservice.getone(createOrderDto.grocery_selected[_item]["groceryid"]);
-                if(_get_grocery["quantity"] >= createOrderDto.grocery_selected[_item]["grocery_quantity"]){
-                    const _update_grocery_count = await this.groceryservice.update(createOrderDto.grocery_selected[_item]["groceryid"],
-                    {quantity: (_get_grocery["quantity"] -createOrderDto.grocery_selected[_item]['grocery_quantity'])});
+            for(const _item in createOrder.groceries){
+                const _get_grocery = await this.groceryservice.getone(createOrder.groceries[_item]["grocery_id"]);
+                console.log(_get_grocery, createOrder.groceries[_item]);
+                if(_get_grocery.quantity >= createOrder.groceries[_item]["ordered_quantity"]){
+                    const _update_grocery_count = await this.groceryservice.update(createOrder.groceries[_item]["grocery_id"],
+                    {quantity: (_get_grocery.quantity -createOrder.groceries[_item]['ordered_quantity'])});
                 }
             }
         }
@@ -30,21 +31,20 @@ export class OrderService {
 
 
         if (!_flag) {
-            const createdOrder = new this.OrderModel(createOrderDto);
-            return createdOrder.save()
+            return await this.OrderModel.save(createOrder);
         }
         return ;
     }
 
     async get(id: string): Promise<Order[]> {
-        return await this.OrderModel.find({user_id: id});
+        return await this.OrderModel.findBy({user_id: id});
     }
 
-    async update(id: string, _data:any): Promise<Order> {
-        if("grocery_quantity" in _data){
-            ;
-        }
-        return await this.OrderModel.findByIdAndUpdate(id, _data);
-    }
+    // async update(id: string, _data:any): Promise<Order> {
+    //     if("grocery_quantity" in _data){
+    //         ;
+    //     }
+    //     return await this.OrderModel.findByIdAndUpdate(id, _data);
+    // }
 
 }
