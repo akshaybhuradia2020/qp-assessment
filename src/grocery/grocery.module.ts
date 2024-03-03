@@ -8,5 +8,6 @@ import { Grocery, GrocerySchema } from '../schemas/grocery.schema';
   imports: [MongooseModule.forFeature([{name: Grocery.name, schema: GrocerySchema}])],
   controllers: [GroceryController],
   providers: [GroceryService],
+  exports:[GroceryService]
 })
 export class GroceryModule {};

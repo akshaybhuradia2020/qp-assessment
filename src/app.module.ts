@@ -5,10 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GroceryModule } from './grocery/grocery.module';
 import { UserOpModule } from './user_op/user_op.module';
 import { AuthModule } from './auth/auth.module';
+import { OrderModule } from './order/order.module';
 
 
 @Module({
-  imports: [GroceryModule, UserOpModule, AuthModule ,MongooseModule.forRoot('mongodb://127.0.0.1:27017/grocery_booking'), ],
+  imports: [GroceryModule, UserOpModule, AuthModule, OrderModule ,MongooseModule.forRoot('mongodb://127.0.0.1:27017/grocery_booking'), ],
   controllers: [AppController],
   providers: [AppService],
 })

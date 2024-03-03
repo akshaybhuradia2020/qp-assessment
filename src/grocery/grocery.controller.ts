@@ -18,25 +18,25 @@ export class GroceryController {
       return await this.groceryService.create(dto);
     }
   
-    @UseGuards(AuthGuard)
     @Get("get_all_gros")
     async getAllGros(){
-      return await this.groceryService.findAll();
+      return await this.groceryService.getall();
     }
 
-    @UseGuards(AuthGuard)
     @Get("get_specific_gros/:id")
     async getSpecifiGros(@Param('id') id: string){
-      return await this.groceryService.findOne(id);
+      return await this.groceryService.getone(id);
     }
 
-    @UseGuards(AuthGuard)
+    @Roles(Role.Admin)
+    @UseGuards(AuthGuard, RolesGuard)
     @Post('update_gros/:id')
-    async updateGrocery(@Param('id') id: string, @Body() dto: CreateGroceryDto){
+    async updateGrocery(@Param('id') id: string, @Body() dto: any){
       return await this.groceryService.update(id, dto);
     }
 
-    @UseGuards(AuthGuard)
+    @Roles(Role.Admin)
+    @UseGuards(AuthGuard, RolesGuard)
     @Delete("delete_grocery/:id")
     async deleteGrocery(@Param('id') id: string){
       return await this.groceryService.delete(id);

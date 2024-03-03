@@ -14,15 +14,15 @@ export class GroceryService {
     return createdGrosery.save();
   }
 
-  async findAll(): Promise<Grocery[]> {
+  async getall(): Promise<Grocery[]> {
     return this.GroceryModel.find().exec();
   }
 
-  async findOne(_id: string):Promise<Grocery[]>{
+  async getone(_id: string):Promise<Grocery[]>{
     return this.GroceryModel.findById(_id);
   }
-  async update(_id: string, createGroceryDto: CreateGroceryDto): Promise<Grocery> {
-    return this.GroceryModel.findByIdAndUpdate(_id, createGroceryDto);
+  async update(_id: string, _data: any): Promise<Grocery> {
+    return this.GroceryModel.findByIdAndUpdate(_id, _data);
   }
 
   async delete(_id: string) {
