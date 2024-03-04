@@ -14,13 +14,14 @@ import { Order, OrderedGrocery } from './order/order.entity';
   imports: [UserOpModule ,AuthModule, GroceryModule, OrderModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'mysql',
-      port: 3307,
-      username: 'root',
+      host: 'db',
+      port: 3306,
+      username: 'development',
       password: 'a',
       database: 'grocery_booking',
       entities: [User, Grocery, OrderedGrocery, Order],
       synchronize: true,
+      retryAttempts: 100
     }), ],
   controllers: [AppController],
   providers: [AppService],

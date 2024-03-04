@@ -40,11 +40,8 @@ export class OrderService {
         return await this.OrderModel.findBy({user_id: id});
     }
 
-    // async update(id: string, _data:any): Promise<Order> {
-    //     if("grocery_quantity" in _data){
-    //         ;
-    //     }
-    //     return await this.OrderModel.findByIdAndUpdate(id, _data);
-    // }
+    async update(id: string, _data:any): Promise<any> {
+        return await this.OrderModel.update(id, _data);
+    }
 
 }

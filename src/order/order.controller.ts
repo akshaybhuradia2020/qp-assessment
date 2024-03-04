@@ -24,11 +24,11 @@ export class OrderController {
       return await this.orderService.get(userid);
     };
 
-    // @UseGuards(AuthGuard)
-    // @Post('update_order/:orderid')
-    // async updateOrder(@Param('orderid') orderid: string, @Body() _data: any){
-    //   return await this.orderService.update(orderid, _data);
-    // };
+    @UseGuards(AuthGuard)
+    @Post('update_order/:orderid')
+    async updateOrder(@Param('orderid') orderid: string, @Body() _data: any){
+      return await this.orderService.update(orderid, _data);
+    };
 }
 
 

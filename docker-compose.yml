@@ -1,14 +1,7 @@
 version: "3.6"
 services:
-  server:
-    container_name: nestjs
-    build: .
-    ports:
-      - 3001:3000
-    depends_on:
-      - mysql
-    
-  mysql:
+  db:
+    container_name : my_sql
     image: mysql
     restart: always
     environment:
@@ -17,11 +10,28 @@ services:
       - MYSQL_PASSWORD=a
       - MYSQL_ROOT_PASSWORD=a
     ports:
-      - 3307:3306
+      - 3306:3306
     expose:
       - 3306
+    networks:
+      - grocery-app
     volumes:
       - mysql-data:/data/db
+
+  api:
+    container_name: nest_js
+    build: .
+    ports:
+      - 3000:3000
+    networks:
+      - grocery-app
+    depends_on:
+      - db
+
+
+networks:
+  grocery-app:
+    driver: bridge
 
 volumes:
   mysql-data: {}
